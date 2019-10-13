@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/testokur/testokur-light/api/config"
 )
 
 func main() {
@@ -11,6 +13,6 @@ func main() {
 		fmt.Fprintf(w, "Healthy!")
 	})
 
-	fmt.Println("Listening on :8066")
-	log.Fatal(http.ListenAndServe(":8066", nil))
+	log.Println(fmt.Sprintf("Listening on %s...", config.GetPort()))
+	log.Fatal(http.ListenAndServe(config.GetPort(), nil))
 }
