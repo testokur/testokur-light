@@ -1,4 +1,4 @@
 .circleci
 README.md
 .gitignore
-deploy-prod.sh
+deploy.sh
