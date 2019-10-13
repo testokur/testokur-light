@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  testokur-light:
+  app:
     image: testokur-light:latest
     build: .
     ports:
