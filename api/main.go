@@ -5,16 +5,24 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/julienschmidt/httprouter"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/testokur/testokur-light/api/config"
 )
 
+func HealthCheck(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprintf(w, "Healthy!")
+}
+
+func Metrics(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	promhttp.Handler().ServeHttp(w, r)
+}
+
 func main() {
-	http.HandleFunc("/hc", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Healthy!")
-	})
-	http.Handle("/metrics", promhttp.Handler())
+	router := httprouter.New()
+	router.GET("/hc", HealthCheck)
+	router.GET("/metrics", Metrics)
 
 	log.Println(fmt.Sprintf("Listening on %s...", config.GetPort()))
-	log.Fatal(http.ListenAndServe(config.GetPort(), nil))
+	log.Fatal(http.ListenAndServe(config.GetPort(), router))
 }
