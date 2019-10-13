@@ -1,0 +1,51 @@
+version: 2.1
+defaults: &defaults
+  working_directory: ~/repo
+  machine: true
+jobs:
+  build-and-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install Docker Compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
+                docker tag testokur-light:latest nazmialtun/testokur-light:$IMAGE_TAG
+                docker tag testokur-light:latest nazmialtun/testokur-light:latest
+                docker push nazmialtun/testokur-light:latest
+                docker push nazmialtun/testokur-light:$IMAGE_TAG
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - deploy.sh
+  deploy-prod:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Run container
+          command: |
+            ssh  $SSH_USERNAME@$PROD_SERVER 'bash -s' < deploy-prod.sh > /dev/null
+workflows:
+  version: 2
+  testokur-light:
+    jobs:
+      - build-and-test:
+          filters:
+            tags:
+              only: /.qa*/
+      - deploy-prod:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

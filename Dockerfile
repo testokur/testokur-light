@@ -10,5 +10,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /app/main .
+RUN mkdir -p data
+COPY --from=builder /app/data ./data
 EXPOSE 8066 
 CMD ["./main"]
