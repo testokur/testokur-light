@@ -27,10 +27,6 @@ jobs:
                 docker tag testokur-light:latest nazmialtun/testokur-light:latest
                 docker push nazmialtun/testokur-light:latest
                 docker push nazmialtun/testokur-light:$IMAGE_TAG
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - deploy.sh
   deploy-prod:
     <<: *defaults
     steps:
