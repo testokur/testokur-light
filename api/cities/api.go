@@ -11,17 +11,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type district struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-type city struct {
-	ID        int        `json:"id"`
-	Name      string     `json:"name"`
-	Districts []district `json:"districts"`
-}
-
 func writeOKResponse(w http.ResponseWriter, m interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
@@ -32,8 +21,8 @@ func writeOKResponse(w http.ResponseWriter, m interface{}) {
 
 var memoryCache = cache.New(99999999, 99999999)
 
-//Api is endpoint for cities
-func Api(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+//Get returns cities from cities.json file
+func Get(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	const cacheKey = "cities"
 	cities, found := memoryCache.Get(cacheKey)
 
