@@ -26,7 +26,7 @@ func main() {
 	router.GET("/hc", healthCheck)
 	router.GET("/api/v1/cities", cities.Get)
 	router.GET("/api/v1/license-types", licensetypes.Get)
-	router.GET("api/v1/localization", localization.Get)
+	router.GET("/api/v1/localization", localization.Get)
 	router.GET("/metrics", prometheusMetrics)
 
 	log.Println(fmt.Sprintf("Listening on %s...", config.GetPort()))
