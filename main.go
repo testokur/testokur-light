@@ -24,9 +24,9 @@ func prometheusMetrics(w http.ResponseWriter, r *http.Request, _ httprouter.Para
 func main() {
 	router := httprouter.New()
 	router.GET("/hc", healthCheck)
-	router.GET("/cities", cities.Get)
-	router.GET("/license-types", licensetypes.Get)
-	router.GET("/localization", localization.Get)
+	router.GET("/api/v1/cities", cities.Get)
+	router.GET("/api/v1/license-types", licensetypes.Get)
+	router.GET("api/v1/localization", localization.Get)
 	router.GET("/metrics", prometheusMetrics)
 
 	log.Println(fmt.Sprintf("Listening on %s...", config.GetPort()))
