@@ -1,4 +1,4 @@
-package cities
+package licensetypes
 
 import (
 	"encoding/json"
@@ -13,9 +13,9 @@ import (
 
 var memoryCache = cache.New(99999999, 99999999)
 
-//Get returns cities from cities.json file
+//Get returns license types
 func Get(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	const cacheKey = "cities"
+	const cacheKey = "license-types"
 	cities, found := memoryCache.Get(cacheKey)
 
 	if found {
@@ -23,7 +23,7 @@ func Get(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		return
 	}
 
-	dat, err := ioutil.ReadFile(filepath.Join("data", "cities.json"))
+	dat, err := ioutil.ReadFile(filepath.Join("data", "license-types.json"))
 	if err != nil {
 		panic(err)
 	}

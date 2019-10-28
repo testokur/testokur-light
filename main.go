@@ -8,7 +8,9 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/testokur/testokur-light/api/cities"
-	"github.com/testokur/testokur-light/api/config"
+	"github.com/testokur/testokur-light/api/licensetypes"
+	"github.com/testokur/testokur-light/api/localization"
+	"github.com/testokur/testokur-light/config"
 )
 
 func healthCheck(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -23,6 +25,8 @@ func main() {
 	router := httprouter.New()
 	router.GET("/hc", healthCheck)
 	router.GET("/cities", cities.Get)
+	router.GET("/license-types", licensetypes.Get)
+	router.GET("/localization", localization.Get)
 	router.GET("/metrics", prometheusMetrics)
 
 	log.Println(fmt.Sprintf("Listening on %s...", config.GetPort()))
