@@ -11,6 +11,7 @@ import (
 	"github.com/testokur/testokur-light/api/licensetypes"
 	"github.com/testokur/testokur-light/api/localization"
 	"github.com/testokur/testokur-light/config"
+	"github.com/urfave/negroni"
 )
 
 func healthCheck(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -29,6 +30,10 @@ func main() {
 	router.GET("/api/v1/localization", localization.Get)
 	router.GET("/metrics", prometheusMetrics)
 
+	n := negroni.New()
+	n.Use(negroni.NewLogger())
+	n.UseHandler(router)
+
 	log.Println(fmt.Sprintf("Listening on %s...", config.GetPort()))
-	log.Fatal(http.ListenAndServe(config.GetPort(), router))
+	log.Fatal(http.ListenAndServe(config.GetPort(), n))
 }

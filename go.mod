@@ -7,4 +7,5 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.9.3
 	github.com/spf13/viper v1.4.0
+	github.com/urfave/negroni v1.0.0
 )
